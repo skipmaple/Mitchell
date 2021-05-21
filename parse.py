@@ -13,8 +13,8 @@ def parse(li):
     """
     data = dict()
     # 评论者昵称
-    data['user_name'] = li.css('.main-review .dper-info > a::text').extract_first(DEFAULT_NAME).strip()
-    print(f"user_name: {data['user_name']}")
+    data['username'] = li.css('.main-review .dper-info > a::text').extract_first(DEFAULT_NAME).strip()
+    # print(f"username: {data['user_name']}")
 
     # 评论星级
     rank_span_str = li.css('.main-review .review-rank .sml-rank-stars').get()
@@ -41,9 +41,9 @@ def parse(li):
     if create_at_match:
         datetime_object = datetime.strptime(create_at_match[0], '%Y-%m-%d %H:%M')
         # data['created_at'] = datetime_object.strftime('%Y-%m-%d %H:%M:%S')
-        data['created_at'] = datetime_object
+        data['comment_at'] = datetime_object
     else:
-        data['created_at'] = None
+        data['comment_at'] = None
     # print(f"created_at: {data['created_at']}")
 
     # 评论内容
@@ -54,11 +54,11 @@ def parse(li):
     comment_content = comment_content.xpath('string()').get().strip()
     comment_content = re.sub("\n", " ", comment_content)
     comment_content = re.sub("\s+", "", comment_content)
-    data['comment_content'] = comment_content
-    print(f"content: {data['comment_content']}")
+    data['comment'] = comment_content
+    # print(f"content: {data['comment_content']}")
 
     # 评论图片
-    data['imgs'] = li.css('.main-review .review-pictures > ul > li > a > img::attr(data-big)').getall()
+    data['origin_images_urls'] = li.css('.main-review .review-pictures > ul > li > a > img::attr(data-big)').getall()
 
     return data
 

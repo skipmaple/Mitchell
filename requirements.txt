@@ -9,3 +9,5 @@ fonttools~=4.21.1
 redis~=3.5.3
 emoji~=1.2.0
 beautifulsoup4~=4.9.3
+PyMySQL~=1.0.2
+SQLObject~=3.9.1

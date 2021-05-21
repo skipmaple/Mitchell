@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import datetime
 import re
 import urllib.error
 
@@ -9,9 +10,10 @@ from pymongo import MongoClient
 from scrapy.selector import Selector
 
 from config import *
+from model.dian_pings import DianPings
 from parse import parse
 from proxy import xdaili_proxy
-from utils.RedisUtil import RedisUtil
+from utils.redis_util import RedisUtil
 from utils.common import *
 
 
@@ -38,15 +40,6 @@ class DianPing(object):
                 return response
         except urllib.error.HTTPError as e:
             print(e.reason)
-
-    # """
-    # with open('./tmp/2021-05-18origin.html') as f:
-    #     html = f.read()
-    #
-    # from bs4 import BeautifulSoup
-    # soup = BeautifulSoup(html, "html.parser")
-    # """
-
 
     def parse_data(self, response):
         soup = BeautifulSoup(response.text, "html.parser")
@@ -78,7 +71,12 @@ class DianPing(object):
                     data = parse(li)
                     data['location'] = location
                     print(data)
-                    self.save_to_db(data)
+                    #
+                    # 存到mongodb
+                    # self.save_to_db(data)
+                    #
+                    # 存到mysql
+                    DianPings(username=data['username'], comment=data['comment'], images=None, origin_images_urls=data['origin_images_urls'], rank_level=data['rank_level'], location=data['location'], comment_at=data['comment_at'], created_at=datetime.datetime.now(), updated_at=datetime.datetime.now())
                     # break
         except Exception as e:
             print('Error: %s, Please Check it.' % e.args)
@@ -160,14 +158,13 @@ class DianPing(object):
             if self.max_pages is None:
                 res = Selector(text=response.text)
                 self.max_pages = int(res.xpath('//div[@class="reviews-pages"]/a/text()')[-2].get())
-                # self.max_pages = 119
                 print("共 %d 页" % self.max_pages)
 
             print("第%d页：" % i)
 
             self.load_css(response)
             self.parse_data(response)
-            time.sleep(np.random.randint(1, 3))
+            time.sleep(np.random.randint(2, 4))
             # 测试仅抓取第一页
             # break
 

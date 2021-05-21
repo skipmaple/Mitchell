@@ -13,7 +13,6 @@ class RedisUtil:
         :param redis_port: redis 端口号
         :param redis_pass: redis 密码
         """
-        self.name_list = None
         if redis_pass:
             pool = redis.ConnectionPool(host=redis_host, port=redis_port, password=redis_pass, decode_responses=True)
         else:
