@@ -9,6 +9,7 @@
 
 ### USAGE
 * 配置文件 [config.py](config.py) 中写入 [大众点评](http://dianping.com) 登录后的cookie
+
   [<img src="doc/cookie_demo.png" width="250"/>](doc/cookie_demo.png)
 * [config.py](config.py) 中根据自己本地环境填写 mysql 或 mongodb 配置信息(**可任选其一**)
 * 安装依赖包 `pip install -r requirements.txt`
